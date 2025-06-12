@@ -1,16 +1,29 @@
 # Step 1: Install dependencies
-#!pip install datasets==3.5.0 transformers==4.51.2 torch==2.6.0 pandas==2.2.2 scikit-learn==1.6.1 --no-cache-dir
+# (This is a comment; dependencies should already be installed via pip as per previous instructions)
+# Ensure: datasets==3.5.0, transformers==4.51.2, torch==2.6.0, pandas==2.2.2, scikit-learn==1.6.1
 
 # Verify GPU
 import torch
 print("GPU Available:", torch.cuda.is_available())
 print("GPU Name:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "None")
 
-# Step 2: Download CSVs
-mkdir -p data/full_dataset
-wget -P data/full_dataset/ https://storage.googleapis.com/gresearch/goemotions/data/full_dataset/goemotions_1.csv
-wget -P data/full_dataset/ https://storage.googleapis.com/gresearch/goemotions/data/full_dataset/goemotions_2.csv
-wget -P data/full_dataset/ https://storage.googleapis.com/gresearch/goemotions/data/full_dataset/goemotions_3.csv
+# Step 2: Create directory and download CSVs
+import os
+import urllib.request
+
+# Create directory
+os.makedirs("data/full_dataset", exist_ok=True)
+
+# Download CSVs
+urls = [
+    "https://storage.googleapis.com/gresearch/goemotions/data/full_dataset/goemotions_1.csv",
+    "https://storage.googleapis.com/gresearch/goemotions/data/full_dataset/goemotions_2.csv",
+    "https://storage.googleapis.com/gresearch/goemotions/data/full_dataset/goemotions_3.csv"
+]
+for url in urls:
+    filename = os.path.join("data/full_dataset", url.split("/")[-1])
+    urllib.request.urlretrieve(url, filename)
+    print(f"Downloaded {filename}")
 
 # Step 3: Process data
 import pandas as pd
@@ -23,6 +36,8 @@ for i in range(1, 4):
     df = pd.read_csv(f"data/full_dataset/goemotions_{i}.csv")
     dfs.append(df)
 full_df = pd.concat(dfs, ignore_index=True)
+
+# 
 
 # Define emotion columns
 emotion_columns = [
@@ -210,4 +225,6 @@ print(f"Test Loss: {test_loss:.4f}, Test F1: {test_f1:.4f}")
 # Step 13: Save Model
 model.save_pretrained("./emotion_model_10")
 tokenizer.save_pretrained("./emotion_model_10")
-zip -r emotion_model_10.zip ./emotion_model_10
+import shutil
+shutil.make_archive("emotion_model_10", "zip", "./emotion_model_10")
+print("Model zipped as emotion_model_10.zip")
