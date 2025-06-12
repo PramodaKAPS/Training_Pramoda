@@ -1,5 +1,5 @@
 # Step 1: Install dependencies
-!pip install datasets==3.5.0 transformers==4.51.2 torch==2.6.0 pandas==2.2.2 scikit-learn==1.6.1 --no-cache-dir
+#!pip install datasets==3.5.0 transformers==4.51.2 torch==2.6.0 pandas==2.2.2 scikit-learn==1.6.1 --no-cache-dir
 
 # Verify GPU
 import torch
@@ -7,10 +7,10 @@ print("GPU Available:", torch.cuda.is_available())
 print("GPU Name:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "None")
 
 # Step 2: Download CSVs
-!mkdir -p data/full_dataset
-!wget -P data/full_dataset/ https://storage.googleapis.com/gresearch/goemotions/data/full_dataset/goemotions_1.csv
-!wget -P data/full_dataset/ https://storage.googleapis.com/gresearch/goemotions/data/full_dataset/goemotions_2.csv
-!wget -P data/full_dataset/ https://storage.googleapis.com/gresearch/goemotions/data/full_dataset/goemotions_3.csv
+mkdir -p data/full_dataset
+wget -P data/full_dataset/ https://storage.googleapis.com/gresearch/goemotions/data/full_dataset/goemotions_1.csv
+wget -P data/full_dataset/ https://storage.googleapis.com/gresearch/goemotions/data/full_dataset/goemotions_2.csv
+wget -P data/full_dataset/ https://storage.googleapis.com/gresearch/goemotions/data/full_dataset/goemotions_3.csv
 
 # Step 3: Process data
 import pandas as pd
@@ -210,4 +210,4 @@ print(f"Test Loss: {test_loss:.4f}, Test F1: {test_f1:.4f}")
 # Step 13: Save Model
 model.save_pretrained("./emotion_model_10")
 tokenizer.save_pretrained("./emotion_model_10")
-!zip -r emotion_model_10.zip ./emotion_model_10
+zip -r emotion_model_10.zip ./emotion_model_10
